@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  name      String?
+  cart      Cart?
+  orders    Order[]
+  reviews   Review[]
+  wishlist  Wishlist?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+  VENDOR
+}
+
+model Product {
+  id          String     @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  stock       Int
+  category    String
+  imageUrl    String?
+  reviews     Review[]
+  cart        Cart[]
+  cartItems   CartItem[] @relation("ProductToCartItem")
+  wishlists   Wishlist[] @relation("ProductToWishlist")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Cart {
+  id        String @id @default(uuid())
+  userId    String @unique
+  productId String
+
+  quantity Int     @default(1)
+  user     User    @relation(fields: [userId], references: [id])
+  product  Product @relation(fields: [productId], references: [id])
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  productId String
+  product   Product @relation(fields: [productId], references: [id], name: "ProductToCartItem")
+  quantity  Int
+}
+
+model Wishlist {
+  id       String    @id @default(uuid())
+  userId   String    @unique
+  productId String
+
+  user     User      @relation(fields: [userId], references: [id])
+  products Product[] @relation(name: "ProductToWishlist")
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  totalAmount Float
+  status      OrderStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+}
