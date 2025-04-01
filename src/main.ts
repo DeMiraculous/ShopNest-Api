@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { RootModule } from './module/root.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
-import { ErrorLoggingInterceptor } from './common/error-logging.interceptot';
+import { ErrorLoggingInterceptor } from './module/common/error-logging.interceptot';
 
 
 async function bootstrap() {

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { BaseRepository } from "src/common/base.repository";
+import { BaseRepository } from "src/module/common/base.repository";
 import { CreateUserDto } from "../dto/user.dto";
 import { User } from "@prisma/client";
 
