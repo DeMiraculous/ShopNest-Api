@@ -4,7 +4,7 @@ import { CreateUserDto, } from "../dto/user.dto";
 import { UserService } from "../service/user.service";
 
 @Controller('Auth')
-export class AuthController {
+export class UserController {
     constructor(private userService: UserService) { }
     @Post("signup")
     async userSignUp(
