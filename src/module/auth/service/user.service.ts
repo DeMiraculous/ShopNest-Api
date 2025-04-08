@@ -2,7 +2,7 @@ import { ConflictException, Injectable, Logger, NotFoundException, UnauthorizedE
 import { CreateUserDto, LoginUserDto } from "../dto/user.dto";
 import { UserRepository, } from "../repository/user.repository";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { User } from "@prisma/client";
 import { LoggedInUser } from "../auth.types";
 

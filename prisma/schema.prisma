@@ -8,17 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
+  id        String   @id @default(uuid())
+  email     String   @unique
   password  String
-  role      Role      @default(USER)
+  role      Role     @default(USER)
   name      String?
   cart      Cart?
   orders    Order[]
   reviews   Review[]
-  wishlist  Wishlist?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
@@ -28,56 +27,80 @@ enum Role {
 }
 
 model Product {
-  id          String     @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String
   price       Float
   stock       Int
   category    String
   imageUrl    String?
-  reviews     Review[]
-  cart        Cart[]
-  cartItems   CartItem[] @relation("ProductToCartItem")
-  wishlists   Wishlist[] @relation("ProductToWishlist")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+
+  reviews   Review[]
+  cartItems CartItem[]
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  OrderItem OrderItem[]
 }
 
 model Cart {
-  id        String @id @default(uuid())
-  userId    String @unique
-  productId String
-
-  quantity Int     @default(1)
-  user     User    @relation(fields: [userId], references: [id])
-  product  Product @relation(fields: [productId], references: [id])
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model CartItem {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
   cartId    String
   productId String
-  product   Product @relation(fields: [productId], references: [id], name: "ProductToCartItem")
-  quantity  Int
-}
+  quantity  Int    @default(1)
 
-model Wishlist {
-  id       String    @id @default(uuid())
-  userId   String    @unique
-  productId String
-
-  user     User      @relation(fields: [userId], references: [id])
-  products Product[] @relation(name: "ProductToWishlist")
+  cart    Cart    @relation(fields: [cartId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
 
 model Order {
-  id          String      @id @default(uuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
-  totalAmount Float
-  status      OrderStatus @default(PENDING)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id         String      @id @default(uuid())
+  userId     String
+  totalPrice Decimal
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+  payment    Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Decimal
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  orderId   String        @unique
+  amount    Decimal
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
 }
 
 enum OrderStatus {

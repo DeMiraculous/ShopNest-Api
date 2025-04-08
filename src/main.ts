@@ -3,11 +3,11 @@ import { RootModule } from './module/root.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
 import { ErrorLoggingInterceptor } from './module/common/error-logging.interceptot';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(RootModule, { snapshot: true });
-  await app.listen(process.env.PORT ?? 3000);
 
   // Enable CORS for all requests.
   app.enableCors();
@@ -30,5 +30,16 @@ async function bootstrap() {
 
   // for handling and logging errors throughout the application. it add more info about the errors returned by the API.
   app.useGlobalInterceptors(new ErrorLoggingInterceptor());
+
+  const config = new DocumentBuilder()
+  .addBearerAuth()
+  .setTitle('ShopNest')
+  .setDescription('BY Mi-Tech Inc')
+  .setVersion('1.0')
+  .build();
+const document = SwaggerModule.createDocument(app, config);
+SwaggerModule.setup('api', app, document);
+
+await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
