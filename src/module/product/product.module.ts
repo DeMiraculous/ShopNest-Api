@@ -6,6 +6,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { ProductService } from "./service/product.service";
 import { ProductRepository } from "./repository/product.repository";
 import { ProductController } from "./controller/product.controller";
+import { RolesGuard } from "../auth/roles.guard";
 
 /**
  * The AuthModule is responsible for handling product related files.
@@ -24,10 +25,10 @@ import { ProductController } from "./controller/product.controller";
             provide: APP_GUARD,
             useClass: AuthGuard,
         },
-        //   {
-        //     provide: APP_GUARD,
-        //     useClass: RolesGuard,
-        //   },
+        {
+            provide: APP_GUARD,
+            useClass: RolesGuard,
+        },
 
         ProductService,
         ProductRepository,

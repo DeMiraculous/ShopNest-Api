@@ -8,36 +8,42 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  name      String?
-  cart      Cart?
-  orders    Order[]
-  reviews   Review[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String
+  role     Role    @default(CUSTOMER)
+  name     String?
+  cart     Cart?
+
+  orders          Order[]
+  reviews         Review[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  productsCreated Product[] @relation("ProductCreator")
+  productsVended  Product[] @relation("ProductVendor")
 }
 
 enum Role {
-  USER
+  CUSTOMER
   ADMIN
   VENDOR
 }
 
 model Product {
-  id          String  @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
   description String
   price       Float
   stock       Int
   category    String
   imageUrl    String?
+  userId      String
+  vendorId    String
+  reviews     Review[]
+  cartItems   CartItem[]
 
-  reviews   Review[]
-  cartItems CartItem[]
-
+  vendor    User        @relation("ProductVendor", fields: [vendorId], references: [id])
+  user      User        @relation("ProductCreator", fields: [userId], references: [id])
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]

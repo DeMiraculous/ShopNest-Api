@@ -12,6 +12,5 @@ var SwaggerApiTagsEnum;
     SwaggerApiTagsEnum["ACCOUNT"] = "Account";
     SwaggerApiTagsEnum["REVIEW"] = "Review";
     SwaggerApiTagsEnum["ORDER"] = "Order";
-    SwaggerApiTagsEnum["WHILST"] = "Whilst";
 })(SwaggerApiTagsEnum || (exports.SwaggerApiTagsEnum = SwaggerApiTagsEnum = {}));
 //# sourceMappingURL=common.enums.js.map

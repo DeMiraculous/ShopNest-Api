@@ -5,9 +5,9 @@ export declare class UserController {
     constructor(userService: UserService);
     userSignUp(createUserDto: CreateUserDto): Promise<{
         name: string | null;
-        id: string;
         email: string;
         password: string;
+        id: string;
         role: import(".prisma/client").$Enums.Role;
         createdAt: Date;
         updatedAt: Date;

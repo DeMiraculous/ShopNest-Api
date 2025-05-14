@@ -2,14 +2,15 @@ import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
-import { AuthGuard } from "../auth/auth.guard";
-import { CartService } from "./service/cart.service";
-import { CartRepository } from "./repository/cart.repository";
-import { CartController } from "./controller/cart.controller";
+import { AuthGuard } from "./auth.guard";
 import { RolesGuard } from "../auth/roles.guard";
+import { AdminService } from "./service/admin.service";
+import { AdminRepository } from "./repository/admin.repository";
+import { AdminController } from "./controller/admin.controller";
+
 
 /**
- * The AuthModule is responsible for handling aucart related operations.
+ * The AuthModule is responsible for handling authentication and authorization.
  */
 @Module({
     imports: [
@@ -30,9 +31,9 @@ import { RolesGuard } from "../auth/roles.guard";
         useClass: RolesGuard,
       },
 
-    CartService,
-    CartRepository
+    AdminService,
+    AdminRepository
     ],
-    controllers: [CartController],
+    controllers: [AdminController],
   })
-  export class CartModule {}
+  export class AdminModule {}

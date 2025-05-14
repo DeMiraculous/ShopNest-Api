@@ -4,6 +4,7 @@ import { AuthModule } from "./auth/auth.module";
 import { ProductModule } from "./product/product.module";
 import { CartModule } from "./cart/cart.module";
 import { OrderModule } from "./order/order.module";
+import { AdminModule } from "./admin/admin.module";
 
 /**
  * The RootModule is the entry point of the application.
@@ -16,7 +17,8 @@ import { OrderModule } from "./order/order.module";
         AuthModule,
         ProductModule,
         CartModule,
-        OrderModule
+        OrderModule,
+        AdminModule
     ],
     controllers: [],
     providers: [],

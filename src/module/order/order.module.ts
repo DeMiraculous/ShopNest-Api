@@ -6,6 +6,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { OrderService } from "./service/order.service";
 import { OrderRepository } from "./repository/order.repository";
 import { OrderController } from "./controller/order.controller";
+import { RolesGuard } from "../auth/roles.guard";
 
 /**
  * The AuthModule is responsible for handling aucart related operations.
@@ -24,7 +25,10 @@ import { OrderController } from "./controller/order.controller";
             provide: APP_GUARD,
             useClass: AuthGuard,
         },
-
+        {
+            provide: APP_GUARD,
+            useClass: RolesGuard,
+        },
         OrderService,
         OrderRepository,
 

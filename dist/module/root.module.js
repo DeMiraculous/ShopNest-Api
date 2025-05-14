@@ -11,6 +11,8 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const product_module_1 = require("./product/product.module");
+const cart_module_1 = require("./cart/cart.module");
+const order_module_1 = require("./order/order.module");
 let RootModule = class RootModule {
 };
 exports.RootModule = RootModule;
@@ -21,7 +23,9 @@ exports.RootModule = RootModule = __decorate([
                 isGlobal: true,
             }),
             auth_module_1.AuthModule,
-            product_module_1.ProductModule
+            product_module_1.ProductModule,
+            cart_module_1.CartModule,
+            order_module_1.OrderModule
         ],
         controllers: [],
         providers: [],

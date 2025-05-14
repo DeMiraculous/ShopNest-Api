@@ -7,6 +7,5 @@ export declare enum SwaggerApiTagsEnum {
     CART = "Cart",
     ACCOUNT = "Account",
     REVIEW = "Review",
-    ORDER = "Order",
-    WHILST = "Whilst"
+    ORDER = "Order"
 }
