@@ -16,7 +16,10 @@ export class UserService {
         this.logger = new Logger(UserService.name);
     }
 
-    //signUp a user
+    /**
+ * @param createUserDto 
+ * @returns 
+ */
     async userSignUp(createUserDto: CreateUserDto): Promise<User> {
         let { email, password, } = createUserDto;
         const salt: string = await bcrypt.genSalt(10);
@@ -31,7 +34,10 @@ export class UserService {
             throw new ConflictException("User already exist");
         }
     }
-    //Login a user
+        /**
+     * login a user 
+     * @returns 
+     */
     async login(loginUserDto: LoginUserDto): Promise<LoggedInUser> {
         const { email, password } = loginUserDto;
 

@@ -4,7 +4,11 @@ import { CreateOrderDto } from "../dto/order.dto";
 
 @Injectable()
 export class OrderRepository extends BaseRepository {
-
+    /**
+      * make an order
+  * @param CreateOrderDto 
+  * @returns 
+  */
     async createOrder(userId: string, data: CreateOrderDto) {
         const items = data.items.map((item) => ({
             productId: item.productId,
@@ -32,14 +36,18 @@ export class OrderRepository extends BaseRepository {
         });
     }
 
-
+    /**
+     * Get user order
+ * @param CreateOrderDto 
+ * @returns 
+ */
     async getUserOrders(userId: string) {
         return this.prisma.order.findMany({
             where: { userId },
             include: { orderItems: true },
         });
     }
-
+//helper method to calculate total price
     private async calculateTotalPrice(items: { productId: string; quantity: number }[]) {
         const prices = await this.prisma.product.findMany({
             where: { id: { in: items.map((item) => item.productId) } },
@@ -51,7 +59,7 @@ export class OrderRepository extends BaseRepository {
             return total + (product?.price || 0) * item.quantity;
         }, 0);
     }
-
+//helper method to get product price
     private async getProductPrice(productId: string) {
         const product = await this.prisma.product.findUnique({
             where: { id: productId },

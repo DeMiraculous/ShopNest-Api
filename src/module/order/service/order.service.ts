@@ -8,11 +8,19 @@ export class OrderService {
     constructor(private orderRepository: OrderRepository) {
         this.logger = new Logger(OrderService.name)
     }
-
+    /**
+      * make an order
+  * @param CreateOrderDto 
+  * @returns 
+  */
     async createOrder(userId: string, data: CreateOrderDto) {
         return this.orderRepository.createOrder(userId, data);
     }
-
+    /**
+     * Get user order
+ * @param CreateOrderDto 
+ * @returns 
+ */
     async getUserOrders(userId: string) {
         return this.orderRepository.getUserOrders(userId);
     }

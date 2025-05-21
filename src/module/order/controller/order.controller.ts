@@ -11,7 +11,11 @@ import { OrderService } from "../service/order.service";
 @Controller('orders')
 export class OrderController {
     constructor(private orderService: OrderService) { }
-
+    /**
+     * make an order
+ * @param CreateOrderDto 
+ * @returns 
+ */
     @Post()
     createOrder(
         @LoggedInUser() userId: string,
@@ -19,7 +23,11 @@ export class OrderController {
     ) {
         return this.orderService.createOrder(userId, data);
     }
-
+    /**
+     * Get user order
+ * @param CreateOrderDto 
+ * @returns 
+ */
     @Get()
     getUserOrders(@LoggedInUser() userId: string) {
         return this.orderService.getUserOrders(userId);

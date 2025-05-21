@@ -5,16 +5,35 @@ import { User } from "@prisma/client";
 
 @Injectable()
 export class UserRepository extends BaseRepository {
-    async findUserByEmail(email: string): Promise<User | null> {
-        return this.prisma.user.findUnique({ where: { email } });
 
-    }
-
+    /**
+ * @param createUserDto 
+ * @returns 
+ */
     async createUser(createUserDto: CreateUserDto) {
         return this.prisma.user.create({
             data: {
                 ...createUserDto
             },
         });
+    }
+    /**
+* find user by Email
+* @returns 
+*/
+    async findUserByEmail(
+        id: string,
+        email: string
+    ): Promise<User | null> {
+        return this.prisma.user.findUnique({ where: { email } });
+    }
+    /**
+* find user by id
+* @returns 
+*/
+    async findUserById(
+        id: string,
+    ): Promise<User | null> {
+        return await this.prisma.user.findUnique({ where: { id } });
     }
 }

@@ -27,6 +27,7 @@ async function bootstrap() {
       transform: true,
       enableDebugMessages: true,
       whitelist: true, // Strip out any properties that are not defined in the DTO.
+      forbidNonWhitelisted: false,
     }),
   );
 

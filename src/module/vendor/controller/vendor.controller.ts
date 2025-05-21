@@ -14,19 +14,32 @@ import { LoggedInUser } from 'src/module/auth/decorators/loggedInUser.decorator'
 @Controller('vendor')
 export class VendorController {
     constructor(private readonly vendorService: VendorService) { }
-
+    /**
+     * Vendor creates product
+     * @param userId 
+     * @param dto 
+     * @returns 
+     */
     @Post('products')
     create(
         @LoggedInUser("id") userId: string,
         @Body() dto: CreateProductDto) {
         return this.vendorService.createProduct(userId, dto);
     }
-
+    /**
+     * Vendor gets his given product by it's product
+     * @param LoggedInUser
+     * @returns 
+     */
     @Get('products')
-    findMyProducts(@Request() req) {
-        return this.vendorService.getMyProducts(req.user.id);
+    findMyProducts(@LoggedInUser() vendorId: string) {
+        return this.vendorService.getMyProducts(vendorId);
     }
-
+    /**
+     * Vendor update a given product by it's product
+     * @param LoggedInUser
+     * @returns 
+     */
     @Patch('products/:id')
     updateProduct(
         @Param('id') id: string,
@@ -35,7 +48,11 @@ export class VendorController {
     ) {
         return this.vendorService.updateMyProduct(id, req.user.id, dto);
     }
-
+    /**
+ * Vendor deletes a given product by it's product
+ * @param LoggedInUser
+ * @returns 
+ */
     @Delete('products/:id')
     deleteProduct(@Param('id') id: string, @Request() req) {
         return this.vendorService.deleteMyProduct(id, req.user.id);

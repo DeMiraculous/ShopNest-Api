@@ -42,8 +42,8 @@ model Product {
   reviews     Review[]
   cartItems   CartItem[]
 
-  vendor    User        @relation("ProductVendor", fields: [vendorId], references: [id])
-  user      User        @relation("ProductCreator", fields: [userId], references: [id])
+  vendor    User ?       @relation("ProductVendor", fields: [vendorId], references: [id])
+  user      User ?       @relation("ProductCreator", fields: [userId], references: [id])
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]
@@ -52,7 +52,7 @@ model Product {
 model Cart {
   id        String     @id @default(uuid())
   userId    String     @unique
-  user      User       @relation(fields: [userId], references: [id])
+  user      User  ?     @relation(fields: [userId], references: [id])
   items     CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -75,7 +75,7 @@ model Order {
   status     OrderStatus @default(PENDING)
   createdAt  DateTime    @default(now())
 
-  user       User        @relation(fields: [userId], references: [id])
+  user       User  ?      @relation(fields: [userId], references: [id])
   orderItems OrderItem[]
   payment    Payment?
 
