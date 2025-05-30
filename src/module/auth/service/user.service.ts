@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { CreateUserDto, LoginUserDto } from "../dto/user.dto";
+import { CreateUserDto, LoginUserDto, ResetPasswordDto } from "../dto/user.dto";
 import { UserRepository, } from "../repository/user.repository";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
@@ -34,10 +34,58 @@ export class UserService {
             throw new ConflictException("User already exist");
         }
     }
-        /**
-     * login a user 
-     * @returns 
-     */
+    /**
+ * reset password
+* @param resetPasswordDto
+* @returns 
+*/
+    async createNewPassword({
+        password_reset_otp,
+        resetPasswordDto,
+    }: {
+        password_reset_otp: string;
+        resetPasswordDto: ResetPasswordDto;
+    }): Promise<string> {
+        const user = await this.userRepoitory.findUserWithToken(
+            password_reset_otp
+        );
+        if (!user) {
+            throw new NotFoundException("user not found");
+        }
+        if (!user.password_reset_time) {
+            throw new UnauthorizedException("Otp not sent.");
+        }
+        const currentTime = new Date();
+        const activationTime = new Date(user.password_reset_time);
+
+        const timeDifference = currentTime.getTime() - activationTime.getTime();
+        const expirationTime = 5 * 60 * 1000;
+
+        if (timeDifference > expirationTime) {
+            throw new UnauthorizedException("Reset otp has expired");
+        }
+        const salt: string = await bcrypt.genSalt(10);
+        const hash: string = await bcrypt.hash(resetPasswordDto.password, salt);
+
+        if (await bcrypt.compare(resetPasswordDto.password, user.password)) {
+            throw new ConflictException("please use a different password");
+        }
+        await this, this.userRepoitory.changePassword(user.id, hash);
+        //         try {
+        //   await this.mailService.sendChangePasswordMail(user);
+        // } catch (error) {
+        //   console.log(error);
+        //   Sentry.captureException(error);
+        //   throw new InternalServerErrorException(
+        //     "An error occurred while sending mail."
+        //   );
+        // }
+        return "success";
+    }
+    /**
+ * login a user 
+ * @returns 
+ */
     async login(loginUserDto: LoginUserDto): Promise<LoggedInUser> {
         const { email, password } = loginUserDto;
 

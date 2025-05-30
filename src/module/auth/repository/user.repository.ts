@@ -22,7 +22,6 @@ export class UserRepository extends BaseRepository {
 * @returns 
 */
     async findUserByEmail(
-        id: string,
         email: string
     ): Promise<User | null> {
         return this.prisma.user.findUnique({ where: { email } });
@@ -35,5 +34,35 @@ export class UserRepository extends BaseRepository {
         id: string,
     ): Promise<User | null> {
         return await this.prisma.user.findUnique({ where: { id } });
+    }
+    /** 
+        * find user withToken
+        * @returns
+        */
+    async findUserWithToken(password_reset_token: string): Promise<User | null> {
+        return await this.prisma.user.findFirst({
+            where: {
+                password_reset_token,
+            },
+        });
+    }
+    /**
+     * change password
+     * @params user, newPassword
+     * @returns
+     */
+    async changePassword(
+        userId: string,
+        newPassword: string
+    ): Promise<void> {
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                login_verified: true,
+                password: newPassword,
+                password_reset_token: null,
+                password_reset_time: null
+            }
+        })
     }
 }

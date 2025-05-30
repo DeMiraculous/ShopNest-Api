@@ -8,12 +8,20 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String
-  role     Role    @default(CUSTOMER)
-  name     String?
-  cart     Cart?
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  password              String    @db.VarChar(255)
+  role                  Role      @default(CUSTOMER)
+  name                  String?
+  cart                  Cart?
+  reset_pin             String?
+  profile_picture       String?
+  password_reset_token  String?
+  login_verified        Boolean   @default(false)
+  verification_attempts Int?
+  disabled              Boolean   @default(false)
+  password_reset_time   DateTime? @db.Timestamp
+  reset_pin_verified    Boolean   @default(false)
 
   orders          Order[]
   reviews         Review[]
@@ -42,8 +50,8 @@ model Product {
   reviews     Review[]
   cartItems   CartItem[]
 
-  vendor    User ?       @relation("ProductVendor", fields: [vendorId], references: [id])
-  user      User ?       @relation("ProductCreator", fields: [userId], references: [id])
+  vendor    User?       @relation("ProductVendor", fields: [vendorId], references: [id])
+  user      User?       @relation("ProductCreator", fields: [userId], references: [id])
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]
@@ -52,7 +60,7 @@ model Product {
 model Cart {
   id        String     @id @default(uuid())
   userId    String     @unique
-  user      User  ?     @relation(fields: [userId], references: [id])
+  user      User?      @relation(fields: [userId], references: [id])
   items     CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -75,7 +83,7 @@ model Order {
   status     OrderStatus @default(PENDING)
   createdAt  DateTime    @default(now())
 
-  user       User  ?      @relation(fields: [userId], references: [id])
+  user       User?       @relation(fields: [userId], references: [id])
   orderItems OrderItem[]
   payment    Payment?
 
